@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ekstrakurikuler - SMAK Santa Maria Malang</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            overflow: visible;
+        }
+        
+        .logos-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-samak {
+            height: 35px;
+            width: auto;
+            margin-top: 2px;
+        }
+        
+        .logo-unosa {
+            height: 50px;
+            width: auto;
+            margin-top: 2px;
+        }
+        
+        .nav-menu {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 5px 0 0 0;
+        }
+        
+        .dropdown-item {
+            position: relative;
+            margin: 0 10px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-family: 'Caveat', cursive;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .profil-btn {
+            border: 3px solid #007BFF;
+            background: rgba(0, 123, 255, 0.2);
+        }
+        
+        .kegiatan-btn {
+            border: 3px solid #F2B807;
+            background: rgba(242, 184, 7, 0.2);
+        }
+        
+        .genz-btn {
+            border: 3px solid #28A745;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(0, 0, 0, 0.8);
+            min-width: 160px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 5px 0;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .dropdown-item:hover .dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .dropdown-item:not(:hover) .dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .dropdown a {
+            display: block;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 0;
+            font-size: 0.85rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .dropdown a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-info {
+            background: transparent;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-family: 'Caveat', cursive;
+            border: 2px solid white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+            white-space: nowrap;
+        }
+        
+        .btn-info:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        body {
+            font-family: 'Caveat', cursive, sans-serif;
+            background: linear-gradient(135deg, #121534, #384C65, #485F88, #9DACCC);
+            color: white;
+            min-height: 100vh;
+            display: block;  /* FIX: Block biar no flex conflict dengan grid */
+            text-align: center;
+            padding: 80px 20px 120px;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto 60px;
+            display: block;  /* FIX: Block untuk stretch grid full */
+        }
+        
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: bounce 2s ease-in-out infinite;
+            line-height: 1.2;
+        }
+        
+        .description {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin: 0 auto 40px;
+            max-width: 900px;
+            text-align: center;
+            opacity: 0.95;
+        }
+        
+        .btn {
+            background-color: #EFBF6A;
+            color: #a55d35;
+            padding: 15px 30px;
+            font-size: 1.4rem;
+            font-family: 'Caveat', cursive;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(79, 143, 255, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        .btn:hover {
+            background-color: #a55d35;
+            color: white;
+            box-shadow: 0 12px 30px rgba(79, 143, 255, 0.6);
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        footer {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 400;
+            padding-bottom: 20px;
+            z-index: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 70px 15px 100px; }
+            .top-bar { padding: 8px 15px; overflow: visible; }
+            .logos-container { gap: 5px; }
+            .logo-samak { height: 30px; margin-top: 1px; }
+            .logo-unosa { height: 40px; margin-top: 1px; }
+            .nav-menu { 
+                flex-direction: row;
+                justify-content: center;
+                margin: 5px 0;
+                flex-wrap: wrap; 
+            }
+            .dropdown-item { margin: 0 5px; }
+            .dropdown { 
+                position: static; 
+                transform: none; 
+                width: 100%; 
+                left: 0; 
+                display: none; 
+            }
+            .dropdown-item:hover .dropdown { display: block; }
+            .btn-info { font-size: 0.8rem; padding: 6px 12px; white-space: normal; }
+            h1 { font-size: 2.5rem; }
+            .description { 
+                font-size: 1.1rem; 
+                max-width: 100%; 
+                padding: 0 10px; 
+            }
+            .ekstra-grid { 
+                grid-template-columns: 1fr !important; 
+                gap: 15px; 
+            }
+            .ekstra-card { 
+                padding: 20px 15px; 
+                text-align: center; 
+            }
+            .ekstra-card h3 { font-size: 1.2rem; }
+            .ekstra-card p { font-size: 0.9rem; }
+            .btn { 
+                bottom: 15px; 
+                padding: 12px 25px; 
+                font-size: 1.2rem; 
+            }
+            footer { font-size: 1rem; padding-bottom: 10px; }
+        }
+        
+        /* GRID CSS DIPINDAH KE AKHIR – OVERRIDE KONFLIK, !IMPORTANT EKSTRA */
+        .ekstra-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;  /* FIXED 4 KOLOM HORIZONTAL – INTEGRASI FIX */
+            gap: 20px !important;
+            margin-bottom: 40px !important;
+            width: 100% !important;
+            max-width: 1200px !important;
+            justify-content: center !important;
+            clear: both;  /* FIX: Clear float/overlap dari header/tombol */
+        }
+        
+        .ekstra-card {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-radius: 15px !important;
+            padding: 25px 20px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            text-align: left !important;
+            height: auto !important;
+            display: block !important;  /* FIX: No flex di card */
+        }
+        
+        .ekstra-card:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 20px rgba(0,123,255,0.3) !important;
+        }
+        
+        .ekstra-card h3 {
+            font-size: 1.4rem !important;
+            font-weight: bold !important;
+            color: #EFBF6A !important;
+            margin-bottom: 10px !important;
+            font-family: 'Caveat', cursive !important;
+        }
+        
+        .ekstra-card p {
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            opacity: 0.9 !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="logos-container">
+            <img src="logo-sanmar.png" alt="Logo SMAK Santa Maria Malang" class="logo-samak">
+            <img src="logo-unosa.png" alt="Logo UNOSA" class="logo-unosa">
+        </div>
+        
+        <div class="nav-menu">
+            <div class="dropdown-item">
+                <a href="profil.html" class="nav-btn profil-btn">Profil UNOSA</a>
+            </div>
+            
+            <div class="dropdown-item">
+                <a href="#" class="nav-btn kegiatan-btn">Liputan Kegiatan</a>
+                <div class="dropdown">
+                    <a href="berorganisasi.html">Berorganisasi</a>
+                    <a href="ekstrakulikuler.html">Ekstrakurikuler</a>
+                </div>
+            </div>
+            
+            <div class="dropdown-item">
+                <a href="kreatif.html" class="nav-btn genz-btn">GenZ Kreatif</a>
+            </div>
+        </div>
+        
+        <a href="index.html" class="btn-info">Kembali ke Beranda</a>
+    </header>
+    
+    <div class="content">
+        <h1>Ekstrakurikuler</h1>
+        
+        <p class="description">SMAK Santa Maria Malang menyediakan berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat dan minat siswa. Dari olahraga hingga seni, semua dirancang untuk membentuk karakter dan keterampilan siswa SMAK Santa Maria Malang.</p>
+        
+        <!-- Grid 20 Cards – Integrasi Fix, 4 Kolom Horizontal -->
+        <div class="ekstra-grid">
+            <div class="ekstra-card">
+
+                <!--Card 1: Akademik-->
+                <h3>Akademik</h3>
+                <p>Kegiatan tambahan untuk mendalami mata pelajaran sekolah dengan bimbingan guru, fokus pada olimpiade dan kompetisi akademik.</p>
+            </div>
+            
+            <!--Card 2: Paduan Suara-->
+            <div class="ekstra-card">
+                <h3>Paduan Suara</h3>
+                <p>Melatih kemampuan menyanyi harmonis dan penampilan panggung, sering tampil di acara sekolah dan kompetisi nasional.</p>
+            </div>
+            
+            <!--Card 3: Paskib-->
+            <div class="ekstra-card">
+                <h3>Paskibra</h3>
+                <p>Latihan baris-berbaris dan upacara untuk membangun disiplin dan kerja sama tim, mewakili sekolah di upacara bendera.</p>
+            </div>
+            
+            <!--Card 4: Fustal-->
+            <div class="ekstra-card">
+        <h3>Futsal</h3>
+        <p>Olahraga tim indoor yang melatih kecepatan, strategi, dan stamina, dengan turnamen internal dan eksternal.</p>
+    </div>
+    
+    <!-- Card 5: E-Sport -->
+    <div class="ekstra-card">
+        <h3>E-Sport</h3>
+        <p>Kompetisi game digital seperti Mobile Legends dan Valorant, mengasah skill strategis dan kerja tim virtual.</p>
+    </div>
+    
+    <!-- Card 6: Bulutangkis -->
+    <div class="ekstra-card">
+        <h3>Bulutangkis</h3>
+        <p>Latihan bulu tangkis untuk meningkatkan ketangkasan dan konsentrasi, ikut serta dalam kejuaraan regional.</p>
+    </div>
+    
+    <!-- Card 7: Bola Basket -->
+    <div class="ekstra-card">
+        <h3>Bola Basket</h3>
+        <p>Tim basket sekolah yang berlatih dribble, shoot, dan defense, bertanding di liga siswa Malang.</p>
+    </div>
+    
+    <!-- Card 8: Bola -->
+    <div class="ekstra-card">
+        <h3>Bola</h3>
+        <p>Sepak bola untuk mengembangkan fisik dan sportivitas, dengan latihan rutin dan pertandingan antar sekolah.</p>
+    </div>
+    
+    <!-- Card 9: Voli -->
+    <div class="ekstra-card">
+        <h3>Voli</h3>
+        <p>Volleyball tim yang fokus pada smash, block, dan passing, mewakili sekolah di turnamen voli siswa.</p>
+    </div>
+    
+    <!-- Card 10: Modern Dance -->
+    <div class="ekstra-card">
+        <h3>Modern Dance</h3>
+        <p>Kelas tari kontemporer untuk ekspresi kreatif melalui gerakan modern, tampil di festival seni.</p>
+    </div>
+    
+    <!-- Card 11: Tari Tradisional -->
+    <div class="ekstra-card">
+        <h3>Tari Tradisional</h3>
+        <p>Pelestarian budaya melalui tarian daerah Indonesia, latihan kostum dan koreografi tradisional.</p>
+    </div>
+    
+    <!-- Card 12: Sinematografi -->
+    <div class="ekstra-card">
+        <h3>Sinematografi</h3>
+        <p>Produksi film pendek dan video kreatif, belajar editing, shooting, dan storytelling visual.</p>
+    </div>
+    
+    <!-- Card 13: Karawitan -->
+    <div class="ekstra-card">
+        <h3>Karawitan</h3>
+        <p>Musik gamelan Jawa untuk memahami seni tradisional, latihan alat musik dan pertunjukan.</p>
+    </div>
+    
+    <!-- Card 14: Cooking Class -->
+    <div class="ekstra-card">
+        <h3>Cooking Class</h3>
+        <p>Kelas memasak kreatif, belajar resep sehat dan presentasi makanan, event bazaar kuliner.</p>
+    </div>
+    
+    <!-- Card 15: Band -->
+    <div class="ekstra-card">
+        <h3>Band</h3>
+        <p>Grup musik sekolah yang latihan gitar, drum, dan vokal, perform di acara sekolah.</p>
+    </div>
+    
+    <!-- Card 16: Bahasa Mandari -->
+    <div class="ekstra-card">
+        <h3>Bahasa Mandari</h3>
+        <p>Kursus bahasa Mandarin untuk komunikasi dan budaya China, persiapan ujian HSK.</p>
+    </div>
+    
+    <!-- Card 17: Fashion -->
+    <div class="ekstra-card">
+        <h3>Fashion</h3>
+        <p>Desain pakaian dan styling, proyek fashion show siswa dengan tema kreatif.</p>
+    </div>
+    
+    <!-- Card 18: Journalistik dan Public Speaking -->
+    <div class="ekstra-card">
+        <h3>Journalistik dan Public Speaking</h3>
+        <p>Menulis berita sekolah dan latihan berbicara di depan umum, produksi majalah siswa.</p>
+    </div>
+    
+    <!-- Card 19: Bahasa Jepang -->
+    <div class="ekstra-card">
+        <h3>Bahasa Jepang</h3>
+        <p>Belajar bahasa Jepang dasar hingga JLPT, budaya anime dan manga sebagai pendukung.</p>
+    </div>
+    
+    <!-- Card 20: Softball -->
+    <div class="ekstra-card">
+        <h3>Softball</h3>
+        <p>Olahraga tim softball untuk kekuatan dan koordinasi, latihan pitching dan batting.</p>
+    </div>
+</div>  <!-- Closing .ekstra-grid – Penting untuk struktur! -->
+        </div>
+    
+   <a href="index.html" class="btn">Kembali ke Beranda</a>
+    
+    <footer>
+        &copy; Project Kokulikuler 2025. Tim UNOSA.
+    </footer>
+</body>
+</html>

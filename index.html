@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Website Wow - Halaman Utama</title>  <!-- Tetap seperti asli -->
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Kop Surat Lebih Kecil/Compact - Fixed Tipis Seperti Sebelumnya */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);  /* Transparan ringan, cocok gradient gelap - tetap statis */
+            padding: 8px 15px;  /* Dikecilkan: 8px vertikal (tipis), 15px horizontal (compact) */
+            display: flex;
+            justify-content: space-between;  /* Logos kiri, menu tengah compact, tombol kanan */
+            align-items: flex-start;  /* Align top untuk tombol kanan atas */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;  /* Full width dari kiri ke kanan */
+            position: fixed;  /* Fixed naik ke atas paling - nggak gerak sama sekali */
+            top: 0;  /* Posisi atas browser - tetap */
+            left: 0;
+            z-index: 1000;  /* Biar di atas konten - prioritas tinggi */
+            overflow: visible;  /* Biar dropdown keluar tanpa clip/shift header */
+        }
+        
+        /* Container Logos Kiri: SMAK + UNOSA Berdampingan */
+        .logos-container {
+            display: flex;
+            align-items: center;  /* Align vertikal tengah */
+            gap: 10px;  /* Jarak rapat antar logo */
+        }
+        
+        .logo-samak {
+            height: 35px;  /* Logo SMAK kecil seperti sebelumnya */
+            width: auto;
+            margin-top: 2px;  /* Align top lebih rapat */
+        }
+        
+        .logo-unosa {
+            height: 50px;  /* Logo UNOSA lebih gede/besar untuk menonjol */
+            width: auto;
+            margin-top: 2px;  /* Align top sama dengan SMAK */
+        }
+        
+        /* Menu Tengah Compact - 3 Tombol Kecil: Profil (Biru), Liputan (Kuning), GenZ (Hijau) */
+        .nav-menu {
+            flex: 1;  /* Tengah */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;  /* Align top */
+            margin: 2px 0 0 0;  /* Margin top lebih kecil biar tipis */
+        }
+        
+        .dropdown-item {
+            position: relative;  /* Untuk dropdown absolute */
+            margin: 0 8px;  /* Dikecilkan: Jarak antar tombol lebih rapat */
+        }
+        
+        .nav-btn {  /* Tombol utama dropdown - Lebih Kecil/Compact */
+            background: transparent;
+            color: white;
+            padding: 6px 12px;  /* Dikecilkan: Padding lebih kecil (dari 8px 16px) */
+            font-size: 0.85rem;  /* Dikecilkan: Font lebih kecil (dari 0.9rem) */
+            font-family: 'Caveat', cursive;
+            border: 2px solid rgba(255, 255, 255, 0.5);  /* Border default semi-transparan */
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2px;  /* Align top lebih rapat */
+        }
+        
+        /* Border Khusus: Profil UNOSA (Biru Tebal) */
+        .profil-btn {
+            border: 3px solid #007BFF;  /* Border biru tebal untuk menonjol */
+        }
+        
+        /* Border Khusus: Liputan Kegiatan (Kuning Tebal) */
+        .kegiatan-btn {
+            border: 3px solid #F2B807;  /* Border kuning tebal untuk menonjol */
+        }
+        
+        /* Border Khusus: GenZ Kreatif (Hijau Tebal) */
+        .genz-btn {
+            border: 3px solid #28A745;  /* Border hijau tebal untuk menonjol */
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);  /* Hover semi-transparan seperti contoh */
+            border-color: white;  /* Hover border putih (override semua warna) */
+            /* Hapus transform scale biar nggak ada ilusi gerak/turun */
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);  /* Glow ringan aja - header stay */
+        }
+        
+        /* Dropdown - Hanya Konten Keluar Saat Hover (Absolute, Nggak Pengaruhi Header) */
+        .dropdown {
+            display: none;  /* Sembunyi default */
+            position: absolute;  /* Absolute biar nggak shift layout/header sama sekali */
+            top: 100%;  /* Turun tepat di bawah tombol utama - tanpa gerakkan header */
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);  /* Center + awal naik sedikit */
+            background: rgba(0, 0, 0, 0.8);  /* Gelap transparan */
+            min-width: 140px;  /* Dikecilkan: Lebih compact */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 4px 0;  /* Dikecilkan: Padding lebih kecil */
+            z-index: 1001;  /* Lebih tinggi dari header, tapi header tetap fixed */
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;  /* Smooth fade + slide - no impact ke header */
+        }
+        
+        /* Muncul Saat Hover Tombol Utama - Hanya Konten Keluar */
+        .dropdown-item:hover .dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);  /* Keluar ke bawah - header diam */
+        }
+        
+        /* Hilang Saat Mouse Leave - Header Tetap */
+        .dropdown-item:not(:hover) .dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .dropdown a {  /* Sub tombol - Lebih Kecil/Compact */
+            display: block;
+            padding: 6px 12px;  /* Dikecilkan: Padding lebih kecil (dari 8px 15px) */
+            border: none;
+            border-radius: 0;
+            font-size: 0.8rem;  /* Dikecilkan: Font lebih kecil */
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .dropdown a:hover {
+            background: rgba(255, 255, 255, 0.2);  /* Hover sub */
+        }
+        
+        /* Tombol 7 Kebiasaan Kanan - Dikecilkan (Border Putih Tipis, Hover Glow) */
+        .btn-kebiasaan { 
+            background: transparent; 
+            color: white; 
+            padding: 6px 15px;  /* Dikecilkan: Padding lebih kecil */
+            font-size: 0.8rem;  /* Dikecilkan: Font lebih kecil */
+            font-family: 'Caveat', cursive; 
+            border: 2px solid white;  /* Border putih tipis */
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin-top: 2px;  /* Align top lebih rapat */
+            white-space: nowrap;  /* No wrap text di desktop */
+        }
+        
+        .btn-kebiasaan:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            transform: scale(1.02); 
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);  /* Glow hover */
+        }
+        
+        /* Body - Padding Top Dikecilkan untuk Match Header Kecil */
+        body {
+            font-family: 'Caveat', cursive, sans-serif;
+            background: linear-gradient(135deg, #121534, #384C65, #485F88, #9DACCC);  /* Gradient biru-ungu tetap */
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;  /* Center vertikal untuk h1 + p */
+            text-align: center;
+            padding: 70px 20px 100px;  /* Dikecilkan: Padding top 70px (dari 80px) + bottom tetap */
+        }
+        
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;  
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;  /* Glow animasi tetap */
+            line-height: 1.2;  
+        }
+        
+        p {
+            font-family: 'Caveat', sans-serif;  
+            font-size: 1.8rem; 
+            margin-bottom: 40px;
+            max-width: 1000px;
+            line-height: 1.8; 
+        }
+        
+        footer {
+            margin-top: auto;
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 400;
+            padding-bottom: 20px;  /* Jarak dari tombol bawah */
+            z-index: 1;  /* Di bawah tombol */
+        }
+        
+        /* Animasi Glow - Tetap */
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #6a11cb, 0 0 30px #2575fc; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #6a11cb, 0 0 40px #2575fc; }
+        }
+        
+        /* Responsif Mobile - Header & Tombol Sudah Kecil, Adjust Padding & Logos */
+        @media (max-width: 768px) {
+            body { padding: 60px 15px 80px; }  /* Dikecilkan: Padding top 60px di mobile (match header kecil) */
+            .top-bar { padding: 6px 12px; overflow: visible; }  /* Lebih kecil di mobile */
+            .logos-container { gap: 5px; }  /* Gap lebih rapat mobile */
+            .logo-samak { height: 30px; margin-top: 1px; }  /* SMAK lebih kecil mobile */
+            .logo-unosa { height: 40px; margin-top: 1px; }  /* UNOSA tetap gede tapi fit mobile */
+            .nav-menu { 
+                flex-direction: row;  /* Horizontal wrap */
+                justify-content: center;
+                margin: 2px 0;
+                flex-wrap: wrap; 
+            }
+            .dropdown-item { margin: 0 4px; }  /* Rapat di mobile */
+            .dropdown { 
+                position: static; 
+                transform: none; 
+                width: 100%; 
+                left: 0; 
+                display: none; 
+                min-width: auto;  /* Full width mobile */
+            }
+            .dropdown-item:hover .dropdown { display: block; }
+            .nav-btn { 
+                padding: 5px 10px;  /* Lebih kecil mobile */
+                font-size: 0.75rem; 
+            }
+            .btn-kebiasaan { 
+                font-size: 0.75rem; 
+                padding: 5px 12px; 
+                margin-top: 1px; 
+                white-space: normal;  /* Wrap text di mobile */
+            }
+            h1 { font-size: 2.5rem; }
+            p { font-size: 1.2rem; }
+            footer { font-size: 1rem; padding-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <!-- Logos Kiri: SMAK + UNOSA Berdampingan (UNOSA Lebih Gede) -->
+        <div class="logos-container">
+            <img src="logo-sanmar.png" alt="Logo SMAK Santa Maria Malang" class="logo-samak">  <!-- Logo SMAK kecil -->
+            <img src="logo-unosa.png" alt="Logo UNOSA" class="logo-unosa">  <!-- Logo UNOSA gede di sebelahnya -->
+        </div>
+        
+        <div class="nav-menu">
+            <!-- 3 Tombol Kecil: Profil UNOSA (Biru), Liputan Kegiatan (Kuning), GenZ Kreatif (Hijau) -->
+            <!-- Tombol 1: Profil UNOSA (Border Biru) -->
+            <div class="dropdown-item">
+                <a href="profil.html" class="nav-btn profil-btn">Profil UNOSA</a>
+            </div>
+            
+            <!-- Tombol 2: Liputan Kegiatan (Border Kuning) -->
+            <div class="dropdown-item">
+                <a href="#" class="nav-btn kegiatan-btn">Liputan Kegiatan</a>
+                <div class="dropdown">
+                    <a href="berorganisasi.html">Berorganisasi</a>
+                    <a href="ekstrakulikuler.html">Ekstrakurikuler</a>
+                </div>
+            </div>
+            
+            <!-- Tombol 3: GenZ Kreatif (Border Hijau) -->
+            <div class="dropdown-item">
+                <a href="kreatif.html" class="nav-btn genz-btn">GenZ Kreatif</a>
+            </div>
+        </div>
+        
+        <!-- Tombol Kanan: 7 Kebiasaan Tetap Ada (Lebih Kecil) -->
+        <a href="7kebiasaan.html" class="btn-kebiasaan">7 Kebiasaan Anak Indonesia Hebat</a>
+    </header>
+
+
+    <h1>WELCOME UNOERS!</h1>
+    <p>Karya tulis ini hadir sebagai upaya untuk mendalami bagaimana mahasiswa dapat menjalani kehidupan kampus yang lebih bermakna dan berdaya. Kami mengupas pentingnya inovasi dalam pemecahan masalah, ekspresi diri melalui berbagai medium seni dan keahlian, serta peran lingkungan akademis dan non-akademis dalam menumbuhkan jiwa kreatif. Kami percaya bahwa setiap mahasiswa memiliki potensi unik yang perlu didorong dan dikembangkan agar mereka mampu menjadi agen perubahan yang adaptif dan solutif. 
+        Kami menyadari bahwa penyusunan karya ini tidak lepas dari berbagai dukungan dan masukan. Untuk itu, kami menyampaikan terima kasih yang tulus kepada semua pihak yang telah memberikan bantuan, inspirasi, dan sumber informasi yang berharga. Kami berharap karya ini dapat memberikan wawasan baru dan memicu semangat para pembaca, khususnya mahasiswa, untuk secara aktif mewujudkan dan menikmati sebuah Kehidupan Mahasiswa Kreatif yang transformatif. Kami sadar bahwa karya ini masih jauh dari sempurna, sehingga kritik dan saran yang membangun akan senantiasa kami terima dengan tangan terbuka demi perbaikan di masa mendatang </p>
+
+    <footer>
+        &copy; Project Kokulikuler 2025. Tim UNOSA.
+    </footer>
+</body>
+</html>

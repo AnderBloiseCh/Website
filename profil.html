@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profil UNOSA - SMAK Santa Maria Malang</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Header Sama Seperti Index (Compact, 3 Tombol Tengah + Kanan) */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            overflow: visible;
+        }
+        
+       /* Kop Surat Lebih Kecil/Compact - Fixed Tipis Seperti Sebelumnya */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);  /* Transparan ringan, cocok gradient gelap - tetap statis */
+            padding: 8px 15px;  /* Dikecilkan: 8px vertikal (tipis), 15px horizontal (compact) */
+            display: flex;
+            justify-content: space-between;  /* Logos kiri, menu tengah compact, tombol kanan */
+            align-items: flex-start;  /* Align top untuk tombol kanan atas */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;  /* Full width dari kiri ke kanan */
+            position: fixed;  /* Fixed naik ke atas paling - nggak gerak sama sekali */
+            top: 0;  /* Posisi atas browser - tetap */
+            left: 0;
+            z-index: 1000;  /* Biar di atas konten - prioritas tinggi */
+            overflow: visible;  /* Biar dropdown keluar tanpa clip/shift header */
+        }
+        
+        /* Container Logos Kiri: SMAK + UNOSA Berdampingan */
+        .logos-container {
+            display: flex;
+            align-items: center;  /* Align vertikal tengah */
+            gap: 10px;  /* Jarak rapat antar logo */
+        }
+        
+        .logo-samak {
+            height: 35px;  /* Logo SMAK kecil seperti sebelumnya */
+            width: auto;
+            margin-top: 2px;  /* Align top lebih rapat */
+        }
+        
+        .logo-unosa {
+            height: 50px;  /* Logo UNOSA lebih gede/besar untuk menonjol */
+            width: auto;
+            margin-top: 2px;  /* Align top sama dengan SMAK */
+        }
+        
+        .nav-menu {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 2px 0 0 0;
+            gap: 5px;
+            flex-wrap: nowrap;
+        }
+        
+        .dropdown-item {
+            position: relative;
+            margin: 0 5px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-family: 'Caveat', cursive;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        
+        /* Highlight Active: Profil Unosa (Background Biru Ringan) */
+        .profil-btn {
+            border: 3px solid #007BFF;
+            background: rgba(0, 123, 255, 0.2);  /* Highlight active */
+        }
+        
+        .kegiatan-btn {
+            border: 3px solid #F2B807;
+        }
+        
+        .genz-btn {
+            border: 3px solid #28A745;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(0, 0, 0, 0.8);
+            min-width: 140px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 4px 0;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .dropdown-item:hover .dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .dropdown-item:not(:hover) .dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .dropdown a {
+            display: block;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 0;
+            font-size: 0.8rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .dropdown a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-kebiasaan { 
+            background: transparent; 
+            color: white; 
+            padding: 6px 15px; 
+            font-size: 0.8rem; 
+            font-family: 'Caveat', cursive; 
+            border: 2px solid white; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin-top: 2px; 
+            white-space: nowrap; 
+            margin-left: -10px; 
+        }
+        
+        .btn-kebiasaan:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            transform: scale(1.02); 
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2); 
+        }
+        
+        body {
+            font-family: 'Caveat', cursive, sans-serif;
+            background: linear-gradient(135deg, #121534, #384C65, #485F88, #9DACCC);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            padding: 70px 20px 120px;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            flex: 1;
+            width: 100%;
+        }
+        
+        .school-name {
+            font-family: 'Playfair Display', serif; 
+            font-size: 3rem; 
+            font-weight: 700; 
+            margin-bottom: 20px; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
+            color: white;
+        }
+        
+        h1 { 
+            font-family: 'Caveat', cursive; 
+            font-size: 2.5rem; 
+            margin-bottom: 20px; 
+            animation: glow 2s ease-in-out infinite alternate; 
+        }
+        
+        /* Deskripsi Singkat UNOSA */
+        .description {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        /* Video Besar Atas – Frame Di Bawahnya (Tambah Jarak ke Galeri) */
+        .video-section {
+            margin-bottom: 50px;  /* Jarak lebih lega ke frame galeri di bawah */
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .video-section iframe {
+            width: 100%;
+            height: 400px;  /* Besar desktop */
+            border: none;
+        }
+        
+        /* Galeri 23 Frame Foto – Tepat Di Bawah Video */
+        .gallery-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-frame {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-frame:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-frame img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        /* Section Team: Nama Panjang & Peran – Di Bawah Galeri */
+        .team-section {
+            text-align: left;
+        }
+        
+        .team-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .team-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-left: 4px solid #007BFF;  /* Accent biru */
+        }
+        
+        .team-card h3 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #EFBF6A;  /* Kuning highlight */
+        }
+        
+        .team-card p {
+            font-size: 1.1rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            background-color: #EFBF6A;
+            color: #a55d35;
+            padding: 15px 30px;
+            font-size: 1.4rem;
+            font-family: 'Caveat', cursive;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(79, 143, 255, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        .btn:hover {
+            background-color: #a55d35;
+            color: white;
+            box-shadow: 0 12px 30px rgba(79, 143, 255, 0.6);
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        footer { 
+            margin-top: auto; 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.2rem; 
+            opacity: 0.8; 
+            font-weight: 400; 
+            padding-bottom: 20px; 
+            z-index: 1; 
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #6a11cb, 0 0 30px #2575fc; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #6a11cb, 0 0 40px #2575fc; }
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 60px 15px 100px; }
+            .top-bar { padding: 6px 12px; }
+            .logo { height: 30px; margin-top: 1px; }
+            .nav-menu { gap: 3px; flex-wrap: wrap; }
+            .dropdown-item { margin: 0 3px; }
+            .nav-btn { padding: 5px 10px; font-size: 0.75rem; }
+            .btn-kebiasaan { font-size: 0.75rem; padding: 5px 12px; margin-left: 0; white-space: normal; }
+            .content { padding: 20px; }
+            .school-name { font-size: 2.5rem; }
+            h1 { font-size: 2rem; }
+            .video-section { margin-bottom: 30px; }
+            .video-section iframe { height: 250px; }
+            .gallery { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+            .gallery-frame img { height: 150px; }
+            .team-grid { grid-template-columns: 1fr; gap: 15px; }
+            .btn { bottom: 15px; padding: 12px 25px; font-size: 1.2rem; }
+            footer { font-size: 1rem; padding-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+      <header class="top-bar">
+ <!-- Logos Kiri: SMAK + UNOSA Berdampingan (UNOSA Lebih Gede) -->
+        <div class="logos-container">
+            <img src="logo-sanmar.png" alt="Logo SMAK Santa Maria Malang" class="logo-samak">  <!-- Logo SMAK kecil -->
+            <img src="logo-unosa.png" alt="Logo UNOSA" class="logo-unosa">  <!-- Logo UNOSA gede di sebelahnya -->
+        </div>
+                
+        <div class="nav-menu">
+            <!-- 3 Tombol Kecil: Profil UNOSA (Biru), Liputan Kegiatan (Kuning), GenZ Kreatif (Hijau) -->
+            <!-- Tombol 1: Profil UNOSA (Border Biru) -->
+            <div class="dropdown-item">
+                <a href="profil.html" class="nav-btn profil-btn">Profil UNOSA</a>
+            </div>
+            
+            <!-- Tombol 2: Liputan Kegiatan (Border Kuning) -->
+            <div class="dropdown-item">
+                <a href="#" class="nav-btn kegiatan-btn">Liputan Kegiatan</a>
+                <div class="dropdown">
+                    <a href="berorganisasi.html">Berorganisasi</a>
+                    <a href="ekstrakulikuler.html">Ekstrakurikuler</a>
+                </div>
+            </div>
+            
+            <!-- Tombol 3: GenZ Kreatif (Border Hijau) -->
+            <div class="dropdown-item">
+                <a href="kreatif.html" class="nav-btn genz-btn">GenZ Kreatif</a>
+            </div>
+        </div>
+    </div>
+        
+        <!-- Tombol Kanan: 7 Kebiasaan Tetap Ada (Lebih Kecil) -->
+        <a href="7kebiasaan.html" class="btn-kebiasaan">7 Kebiasaan Anak Indonesia Hebat</a>
+    </header>
+    
+    <div class="content">
+        <h2 class="school-name">SMAK SANTA MARIA MALANG</h2>
+        
+        <h1>Profil UNOSA</h1>
+        <!-- Video Besar Atas -->
+        <div class="video-section">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Profil UNOSA" allowfullscreen></iframe>  <!-- Ganti src dengan video asli UNOSA -->
+        </div>
+        
+        <!-- Galeri 23 Frame Foto – Di Bawah Video -->
+        <div class="gallery-section">
+            <h2>Galeri Kegiatan UNOSA</h2>
+            <div class="gallery">
+                <div class="gallery-frame">
+                    <img src="Bu Atik.jpeg" alt="Bu Marsilina Atik Woroastuti, S.Pd (Penanggung Jawab)">
+                    <p>Bu Marsilina Atik Woroastuti, S.Pd (Penanggung Jawab)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Pak Mispan.jpeg" alt="Pak J.B.Mispan, S.Pd (Penanggung Jawab)">
+                    <p>Pak J.B.Mispan, S.Pd (Penanggung Jawab)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Clement.jpeg" alt="Clement Onesiforus Eudora Weol (Ketua Redaksi)">
+                    <p>Clement Onesiforus Eudora Weol (Ketua Redaksi)</p>
+                </div>
+
+                  <div class="gallery-frame">
+                    <img src="Brave.jpeg" alt="Brave Triaji Suryo Utomo (Wakil Ketua Redaksi)">
+                    <p>Brave Triaji Suryo Utomo (Wakil Ketua Redaksi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Ander.jpeg" alt="Alexander Bloise Challot">
+                    <p>Alexander Bloisè Challot (Web Developer)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Aura.jpeg" alt="Aura Damai Nathalia">
+                    <p>Aura Damai Nathalia (Penulis)</p>
+                </div>
+
+                  <div class="gallery-frame">
+                    <img src="Michelle.jpeg" alt="Michelle Austin Joan">
+                    <p>Michelle Austin Joan (Penulis)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Ethan.jpeg" alt="Sean Ethannael Gunawan">
+                    <p>Sean Ethannael Gunawan (Penulis)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Vito.jpeg" alt="Antonius Vito Ersanto Endro">
+                    <p>Antonius Vito Ersanto Endro (Penulis)</p>
+                </div>
+
+                  <div class="gallery-frame">
+                    <img src="Nikita.jpeg" alt="Nikita Eliora Vania Rebecca Butar-Butar">
+                    <p>Nikita Eliora Vania Rebecca Butar-Butar (Desain dan Illustrasi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Grace.jpeg" alt="Gracecella Dearest Taroreh">
+                    <p>Gracecella Dearest Taroreh (Desain dan Illustrasi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Gracia.jpeg" alt="Gracia Nova Ardylla Setyani">
+                    <p>Gracia Nove Ardylla Setyani (Desain dan Illustrasi)</p>
+                </div>
+                  <div class="gallery-frame">
+                    <img src="Ellie.jpeg" alt="Zhunka Electra Avananda">
+                    <p>Zhunka Electra Avananda (Desain dan Illustrasi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Florentina.jpeg" alt="Florentina Catherine Wirhaspati">
+                    <p>Florentina Catherine Wirhaspati (Desain dan Illustrasi)</p>
+                </div>
+
+                  <div class="gallery-frame">
+                    <img src="Adel.jpeg" alt="Adelia Carney Aurora">
+                    <p>Adelia Carney Aurora (Fotografi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Velove.jpeg.jpeg" alt="Maria Agata Velove">
+                    <p>Maria Agata Velove (Fotografi)</p>
+                </div>
+
+               <div class="gallery-frame">
+                    <img src="Serghe.jpeg" alt="Serghe Khalley Raphfa Nizhi">
+                    <p>Serghe Khalley Raphfa Nizhi (Fotografi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Kevin.jpeg" alt="Kevin Kurniawan">
+                    <p>Kevin Kurniawan (Promosi dan Distribusi)</p>
+                </div>
+
+              <div class="gallery-frame">
+                    <img src="Kenzo.jpeg" alt="Kenzo Nathanael Sanjaya">
+                    <p>Kenzo Nathanael Sanjaya (Promosi dan Distribusi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Enzo.jpeg" alt="Cornellius Iuven Lorenzo">
+                    <p>Cornellius Iuven Lorenzo (Promosi dan Distribusi)</p>
+                </div>
+
+                 <div class="gallery-frame">
+                    <img src="Felix.jpeg" alt="Felix Gunarso Cahyono">
+                    <p>Felix Gunarso Cahyono (Promosi dan Distribusi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Veronica.jpeg" alt="Veronika Lua Bong">
+                    <p>Veronika Lua Bong (Promosi dan Distribusi)</p>
+                </div>
+
+                <div class="gallery-frame">
+                    <img src="Kezia.jpeg" alt="Maria Kezia Sutjiadi">
+                    <p>Maria Kezia Sutjiadi (Promosi dan Distribusi)</p>
+                </div>

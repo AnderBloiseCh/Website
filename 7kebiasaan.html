@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>7 Kebiasaan Anak Indonesia Hebat - SMAK Santa Maria Malang</title>
+    
+    <!-- Import Font Sama Seperti Index -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS untuk Konten Super Panjang Blog-Style (Teks-Only, No Foto) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+       /* Kop Surat Lebih Kecil/Compact - Fixed Tipis Seperti Sebelumnya */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);  /* Transparan ringan, cocok gradient gelap - tetap statis */
+            padding: 8px 15px;  /* Dikecilkan: 8px vertikal (tipis), 15px horizontal (compact) */
+            display: flex;
+            justify-content: space-between;  /* Logos kiri, menu tengah compact, tombol kanan */
+            align-items: flex-start;  /* Align top untuk tombol kanan atas */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;  /* Full width dari kiri ke kanan */
+            position: fixed;  /* Fixed naik ke atas paling - nggak gerak sama sekali */
+            top: 0;  /* Posisi atas browser - tetap */
+            left: 0;
+            z-index: 1000;  /* Biar di atas konten - prioritas tinggi */
+            overflow: visible;  /* Biar dropdown keluar tanpa clip/shift header */
+        }
+        
+        /* Container Logos Kiri: SMAK + UNOSA Berdampingan */
+        .logos-container {
+            display: flex;
+            align-items: center;  /* Align vertikal tengah */
+            gap: 10px;  /* Jarak rapat antar logo */
+        }
+        
+        .logo-samak {
+            height: 35px;  /* Logo SMAK kecil seperti sebelumnya */
+            width: auto;
+            margin-top: 2px;  /* Align top lebih rapat */
+        }
+        
+        .logo-unosa {
+            height: 50px;  /* Logo UNOSA lebih gede/besar untuk menonjol */
+            width: auto;
+            margin-top: 2px;  /* Align top sama dengan SMAK */
+        }
+        
+        /* Menu Tengah Compact - 3 Tombol Kecil: Profil (Biru), Liputan (Kuning), GenZ (Hijau) */
+        .nav-menu {
+            flex: 1;  /* Tengah */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;  /* Align top */
+            margin: 2px 0 0 0;  /* Margin top lebih kecil biar tipis */
+        }
+        
+        .dropdown-item {
+            position: relative;  /* Untuk dropdown absolute */
+            margin: 0 8px;  /* Dikecilkan: Jarak antar tombol lebih rapat */
+        }
+        
+        .nav-btn {  /* Tombol utama dropdown - Lebih Kecil/Compact */
+            background: transparent;
+            color: white;
+            padding: 6px 12px;  /* Dikecilkan: Padding lebih kecil (dari 8px 16px) */
+            font-size: 0.85rem;  /* Dikecilkan: Font lebih kecil (dari 0.9rem) */
+            font-family: 'Caveat', cursive;
+            border: 2px solid rgba(255, 255, 255, 0.5);  /* Border default semi-transparan */
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2px;  /* Align top lebih rapat */
+        }
+        
+        /* Border Khusus: Profil UNOSA (Biru Tebal) */
+        .profil-btn {
+            border: 3px solid #007BFF;  /* Border biru tebal untuk menonjol */
+        }
+        
+        /* Border Khusus: Liputan Kegiatan (Kuning Tebal) */
+        .kegiatan-btn {
+            border: 3px solid #F2B807;  /* Border kuning tebal untuk menonjol */
+        }
+        
+        /* Border Khusus: GenZ Kreatif (Hijau Tebal) */
+        .genz-btn {
+            border: 3px solid #28A745;  /* Border hijau tebal untuk menonjol */
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);  /* Hover semi-transparan seperti contoh */
+            border-color: white;  /* Hover border putih (override semua warna) */
+            /* Hapus transform scale biar nggak ada ilusi gerak/turun */
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);  /* Glow ringan aja - header stay */
+        }
+        
+        /* Dropdown - Hanya Konten Keluar Saat Hover (Absolute, Nggak Pengaruhi Header) */
+        .dropdown {
+            display: none;  /* Sembunyi default */
+            position: absolute;  /* Absolute biar nggak shift layout/header sama sekali */
+            top: 100%;  /* Turun tepat di bawah tombol utama - tanpa gerakkan header */
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);  /* Center + awal naik sedikit */
+            background: rgba(0, 0, 0, 0.8);  /* Gelap transparan */
+            min-width: 140px;  /* Dikecilkan: Lebih compact */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 4px 0;  /* Dikecilkan: Padding lebih kecil */
+            z-index: 1001;  /* Lebih tinggi dari header, tapi header tetap fixed */
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;  /* Smooth fade + slide - no impact ke header */
+        }
+        
+        .dropdown-item:hover .dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .dropdown-item:not(:hover) .dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .dropdown a {
+            display: block;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 0;
+            font-size: 0.85rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .dropdown a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+                /* Tombol Kembali Kanan - Dikecilkan (Border Putih Tipis, Hover Glow) */
+        .btn-kembali { 
+            background: transparent; 
+            color: white; 
+            padding: 8px 20px;  /* Dikecilkan: Padding lebih kecil (dari 8px 20px) */
+            font-size: 0.85rem;  /* Dikecilkan: Font lebih kecil (dari 0.85rem) */
+            font-family: 'Caveat', cursive; 
+            border: 2px solid white;  /* Border putih tipis */
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin-top: 5px;  /* Align top lebih rapat */
+            white-space: nowrap;  /* No wrap text di desktop */
+        }
+        
+        .btn-info {
+            background: transparent;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-family: 'Caveat', cursive;
+            border: 2px solid white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .btn-info:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+        
+        body {
+            font-family: 'Caveat', cursive, sans-serif;
+            background: linear-gradient(135deg, #FC0031, #303AF2, #0CF25D, #F2CB05);
+            color: white;
+            min-height: 100vh;
+            padding: 80px 20px 100px;
+            text-align: center;
+        }
+        
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .intro {
+            font-size: 1.4rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+        
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;  /* Glow animasi */
+        }
+        
+        .kebiasaan-section {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        /* CSS Foto Tetap (Kalau Mau Dipakai Nanti) */
+        .kebiasaan-foto {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin: 20px 0 15px;
+            color: #F2B807;
+        }
+        
+        p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .kesimpulan {
+            font-size: 1.4rem;
+            line-height: 1.7;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            text-align: left;
+        }
+        
+        .btn {
+            background-color: #EFBF6A;
+            color: #a55d35;
+            padding: 15px 30px;
+            font-size: 1.4rem;
+            font-family: 'Caveat', cursive;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(79, 143, 255, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        .btn:hover {
+            background-color: #a55d35;
+            color: white;
+            box-shadow: 0 12px 30px rgba(79, 143, 255, 0.6);
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        footer {
+            margin-top: 40px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 400;
+            padding-bottom: 20px;
+            z-index: 1;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #6a11cb, 0 0 30px #2575fc; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #6a11cb, 0 0 40px #2575fc; }
+        }
+        
+        @media (max-width: 768px) {
+            .top-bar { padding: 8px 15px; overflow: visible; }
+            .logo { height: 35px; margin-top: 2px; }
+            .nav-menu { flex-direction: row; justify-content: center; margin: 5px 0; flex-wrap: wrap; }
+            .dropdown-item { margin: 0 5px; }
+            .dropdown { position: static; transform: none; width: 100%; left: 0; display: none; }
+            .dropdown-item:hover .dropdown { display: block; }
+            .btn-info { font-size: 0.8rem; padding: 6px 12px; margin-top: 2px; }
+            body { padding: 70px 15px 80px; }
+            .content { padding: 20px; max-width: 100%; }
+            .intro, .kesimpulan { font-size: 1.2rem; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            p { font-size: 1.1rem; line-height: 1.6; }
+            .kebiasaan-section { margin-bottom: 50px; }
+            .btn { bottom: 15px; padding: 12px 25px; font-size: 1.2rem; }
+            footer { font-size: 1rem; padding-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+     <header class="top-bar">
+ <!-- Logos Kiri: SMAK + UNOSA Berdampingan (UNOSA Lebih Gede) -->
+        <div class="logos-container">
+            <img src="logo-sanmar.png" alt="Logo SMAK Santa Maria Malang" class="logo-samak">  <!-- Logo SMAK kecil -->
+            <img src="logo-unosa.png" alt="Logo UNOSA" class="logo-unosa">  <!-- Logo UNOSA gede di sebelahnya -->
+        </div>
+                
+        <div class="nav-menu">
+            <!-- 3 Tombol Kecil: Profil UNOSA (Biru), Liputan Kegiatan (Kuning), GenZ Kreatif (Hijau) -->
+            <!-- Tombol 1: Profil UNOSA (Border Biru) -->
+            <div class="dropdown-item">
+                <a href="profil.html" class="nav-btn profil-btn">Profil UNOSA</a>
+            </div>
+            
+            <!-- Tombol 2: Liputan Kegiatan (Border Kuning) -->
+            <div class="dropdown-item">
+                <a href="#" class="nav-btn kegiatan-btn">Liputan Kegiatan</a>
+                <div class="dropdown">
+                    <a href="berorganisasi.html">Berorganisasi</a>
+                    <a href="ekstrakulikuler.html">Ekstrakurikuler</a>
+                </div>
+            </div>
+            
+            <!-- Tombol 3: GenZ Kreatif (Border Hijau) -->
+            <div class="dropdown-item">
+                <a href="kreatif.html" class="nav-btn genz-btn">GenZ Kreatif</a>
+            </div>
+        </div>
+    </div>
+        
+        <!-- Karena ini SLide 7 Kebiasaan, Tombol Diganti ke Balik ke Beranda -->
+        <a href="index.html" class="btn-kembali">Kembali ke Beranda</a>
+    </header>
+    
+    <div class="content">
+        <div class="intro">
+            <p>Di era digital saat ini, di mana gadget dan hiburan instan mendominasi kehidupan anak muda, membentuk kebiasaan positif menjadi kunci utama untuk menciptakan generasi Indonesia yang hebat dan tangguh. Sebagai bagian dari pendidikan karakter di sekolah seperti SMAK Santa Maria Malang, 7 kebiasaan ini bukan hanya rutinitas harian, tapi fondasi untuk membangun pribadi yang beriman, sehat, dan berkontribusi bagi bangsa. Kebiasaan-kebiasaan ini terinspirasi dari nilai-nilai lokal Indonesia yang kaya akan semangat gotong royong dan disiplin, serta didukung oleh penelitian modern tentang pengembangan diri anak. Bayangkan jika setiap anak Indonesia mempraktikkannya: negara kita akan dipenuhi pemuda yang produktif, kreatif, dan penuh kasih. Mari kita jelajahi satu per satu, lengkap dengan tips praktis, cerita inspiratif, dan cara mengintegrasikannya ke kehidupan sehari-hari, agar Anda bisa menerapkannya mulai hari ini dan menjadi bagian dari generasi emas Indonesia.</p>
+        </div>
+        
+        <h1>7 Kebiasaan Anak Indonesia Hebat</h1>
+        
+        <!-- 1. Bangun Pagi -->
+        <div class="kebiasaan-section">
+            <h2>1. Bangun Pagi</h2>
+            <p>Bangun pagi melatih anak untuk menghargai waktu dan memulai hari dengan semangat. Kebiasaan ini membentuk disiplin dan kesiapan mental menghadapi aktivitas harian. Anak yang terbiasa bangun pagi cenderung lebih produktif dan memiliki waktu lebih untuk belajar, bermain, dan berinteraksi dengan lingkungan.
+Orang tua dan guru dapat membantu dengan membuat rutinitas tidur yang konsisten dan menyenangkan, seperti membaca cerita sebelum tidur atau menyusun jadwal pagi bersama. Dengan begitu, anak belajar bahwa waktu adalah aset berharga yang harus dimanfaatkan sebaik mungkin.
+Kebiasaan bangun pagi juga memberi ruang bagi anak untuk menikmati momen tenang sebelum hari dimulai, seperti sarapan bersama keluarga atau sekadar menikmati udara segar. Ini memperkuat ikatan emosional dan menciptakan suasana positif sejak dini.</p>
+        </div>
+        
+        <!-- 2. Beribadah -->
+        <div class="kebiasaan-section">
+            <h2>2. Beribadah</h2>
+            <p>Beribadah bukan hanya ritual, tetapi juga latihan spiritual dan moral yang membentuk kepribadian anak. Melalui ibadah, anak belajar nilai keikhlasan, rasa syukur, dan kedekatan dengan Tuhan, yang menjadi fondasi karakter yang kuat.
+Penting bagi orang tua dan guru untuk menjadi teladan dalam beribadah, serta menjelaskan makna di balik setiap tindakan spiritual. Anak yang memahami esensi ibadah akan tumbuh dengan kesadaran diri dan empati terhadap sesama.
+Kebiasaan ini juga membantu anak mengembangkan ketenangan batin dan kemampuan refleksi, yang sangat penting dalam menghadapi tantangan hidup. Ibadah menjadi ruang aman bagi anak untuk merenung dan memperkuat nilai-nilai luhur.</p>
+        </div>
+        
+        <!-- 3. Berolahraga -->
+        <div class="kebiasaan-section">
+            <h2>3. Berolahraga</h2>
+            <p>Olahraga bukan hanya soal fisik, tetapi juga tentang disiplin, kerja sama, dan ketahanan mental. Anak yang aktif berolahraga memiliki daya tahan tubuh yang lebih baik dan suasana hati yang lebih stabil.
+Liputan Kegiatan seperti senam pagi, bermain bola, atau bersepeda bersama teman dapat menjadi sarana menyenangkan untuk menanamkan kebiasaan ini. Guru dan orang tua bisa mengintegrasikan olahraga dalam rutinitas harian anak, baik di sekolah maupun di rumah.
+Selain itu, olahraga juga melatih anak untuk menetapkan tujuan, menghadapi tantangan, dan merayakan pencapaian. Ini membentuk karakter tangguh dan percaya diri yang akan berguna sepanjang hidup.</p>
+        </div>
+        
+        <!-- 4. Makan Sehat dn Bergizi -->
+        <div class="kebiasaan-section">
+            <h2>4. Makan Sehat dan Bergizi</h2>
+            <p>Pola makan sehat adalah fondasi tumbuh kembang anak. Nutrisi yang cukup dan seimbang membantu anak fokus belajar, aktif bergerak, dan menjaga kesehatan mental.
+Orang tua dapat melibatkan anak dalam proses memilih dan menyiapkan makanan, agar mereka memahami pentingnya gizi. Misalnya, membuat bekal sekolah bersama atau mengenalkan buah dan sayur lewat cerita dan permainan.
+Kebiasaan ini juga mengajarkan anak untuk menghargai tubuh mereka dan membuat pilihan yang bijak. Makan sehat bukan sekadar kewajiban, tetapi bagian dari gaya hidup yang menyenangkan dan penuh makna.</p>
+
+        <!-- 5. Gemar Belajar -->
+        <div class="kebiasaan-section">
+            <h2>5. Gemar Belajar</h2>
+            <p>Belajar bukan hanya soal nilai akademik, tetapi tentang rasa ingin tahu dan pengembangan potensi diri. Anak yang gemar belajar akan tumbuh menjadi individu yang mandiri dan inovatif.
+Lingkungan belajar yang menyenangkan, seperti sudut baca di rumah atau penggunaan teknologi edukatif, dapat memicu semangat anak. Guru dan orang tua perlu mendorong eksplorasi, bukan hanya hafalan.
+Kebiasaan ini juga membentuk pola pikir berkembang (growth mindset), di mana anak melihat kesalahan sebagai peluang belajar. Dengan begitu, mereka menjadi pembelajar seumur hidup yang siap menghadapi perubahan zaman.</p>
+
+         <!-- 6. Bermasyarakat -->
+        <div class="kebiasaan-section">
+            <h2>6. Bermasyarakat</h2>
+            <p>Interaksi sosial membentuk kepekaan, empati, dan rasa tanggung jawab. Anak yang aktif bermasyarakat belajar memahami perbedaan, bekerja sama, dan menyelesaikan konflik secara sehat.
+Liputan Kegiatan seperti kerja bakti, bermain bersama, atau mengikuti organisasi kecil di sekolah dapat menjadi wadah pembelajaran sosial. Orang tua dan guru perlu memberi ruang bagi anak untuk berkontribusi dan merasa dihargai.
+Kebiasaan ini juga memperkuat identitas anak sebagai bagian dari komunitas. Mereka belajar bahwa keberhasilan pribadi tak lepas dari dukungan dan kolaborasi dengan orang lain.</p>
+
+        <!-- 7. Tidur Cepat -->
+        <div class="kebiasaan-section">
+            <h2>7. Tidur Cepat</h2>
+            <p>Tidur cukup dan teratur sangat penting bagi perkembangan otak dan emosi anak. Anak yang tidur cepat cenderung lebih fokus, ceria, dan siap belajar keesokan harinya.
+Rutinitas tidur yang konsisten, seperti membaca buku atau mendengarkan musik tenang sebelum tidur, dapat membantu anak merasa nyaman dan rileks. Hindari paparan layar menjelang waktu tidur agar kualitas tidur tetap optimal.
+Kebiasaan ini juga mengajarkan anak tentang pentingnya menjaga kesehatan dan keseimbangan hidup. Tidur bukan sekadar istirahat, tetapi bagian dari proses pemulihan dan pertumbuhan yang tak tergantikan.</p>
